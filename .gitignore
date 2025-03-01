@@ -1,0 +1,11 @@
+# i want to ignore binary files with no extension
+
+# Ignore all
+*
+
+# Unignore all with extensions
+!*.*
+
+# Unignore all dirs
+!*/
+
