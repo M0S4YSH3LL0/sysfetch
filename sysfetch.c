@@ -20,7 +20,7 @@
 #include <sys/utsname.h>
 #include <unistd.h>
 
-#define VERSION "0.36"
+#define VERSION "0.37"
 #define AUTHOR "m0s4ysh3ll0"
 
 // might add custom config support, like: sysfetch -c custom_config.conf
@@ -99,6 +99,7 @@ void get_hostname(char *buffer, size_t size) {
   if (fgets(buffer, size, file) == NULL) {
     snprintf(buffer, size, "%s", "N/A");
   }
+  buffer[strcspn(buffer, "\n")] = 0;
 
   fclose(file);
   return;
@@ -186,6 +187,8 @@ int main(int argc, char *argv[]) {
 
   print_header();
 
+  printf("%s%s%s@%s%s%s\n-----------------\n", BLU, "m0", NRM, GRN, hostname,
+         NRM);
   print_colored(os_label, os);
   print_colored(kernel_label, kernel);
   print_colored(shell_label, shell);
