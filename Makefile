@@ -7,17 +7,18 @@ LOCAL_BIN_PATH=/home/m0/.local/bin
 BIN_ORIGINAL=sysfetch
 BIN_NEW=sfetch
 PWD := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
+BUILD_DIR=$(PWD)bin/
 
 .PHONY: clean build link all
 
 clean:
-	$(RM) sysfetch
+	$(RM) $(BUILD_DIR)sysfetch
 
 build:
-	$(CC) $(CFLAGS) sysfetch.c -o sysfetch
+	$(CC) $(CFLAGS) sysfetch.c -o $(BUILD_DIR)sysfetch
 
 link:
-	ln -sf $(PWD)$(BIN_ORIGINAL) $(LOCAL_BIN_PATH)/$(BIN_NEW)
+	ln -sf $(BUILD_DIR)$(BIN_ORIGINAL) $(LOCAL_BIN_PATH)/$(BIN_NEW)
 
 all: clean build link
 
