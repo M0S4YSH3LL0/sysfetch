@@ -46,7 +46,6 @@ void get_shell_info(char *buffer, size_t size) {
   snprintf(buffer, size, "%s", shell);
 }
 
-// NOTE: only for dpkg packages for now
 void get_installed_packages_info(char *buffer, size_t size) {
   FILE *fp = popen("dpkg --get-selections | grep -c 'install'", "r");
   if (fp == NULL) {
