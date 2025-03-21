@@ -176,8 +176,8 @@ int main(int argc, char *argv[]) {
   char kernel[BUFFER_SIZE];
   char os[BUFFER_SIZE];
   char hostname[BUFFER_SIZE];
-  // char libc[BUFFER_SIZE];
-  // char installed_pkgs[BUFFER_SIZE];
+  char libc[BUFFER_SIZE];
+  char installed_pkgs[BUFFER_SIZE];
   char shell[BUFFER_SIZE];
   char arch[BUFFER_SIZE];
 
@@ -185,9 +185,9 @@ int main(int argc, char *argv[]) {
   get_hostname(hostname, BUFFER_SIZE);
   get_os_info(os, BUFFER_SIZE);
   get_kernel_info(kernel, BUFFER_SIZE);
-  // get_libc_info(libc, BUFFER_SIZE);
+  get_libc_info(libc, BUFFER_SIZE);
   get_uptime(uptime, BUFFER_SIZE);
-  // get_installed_packages_info(installed_pkgs, BUFFER_SIZE);
+  get_installed_packages_info(installed_pkgs, BUFFER_SIZE);
   get_shell_info(shell, BUFFER_SIZE);
 
   print_header();
@@ -198,8 +198,8 @@ int main(int argc, char *argv[]) {
   print_colored(arch_label, arch);
   print_colored(kernel_label, kernel);
   print_colored(shell_label, shell);
-  // print_colored(pkgs_label, installed_pkgs);
-  // print_colored(libc_label, libc);
+  print_colored(pkgs_label, installed_pkgs);
+  print_colored(libc_label, libc);
   print_colored(uptime_label, uptime);
 
   return EXIT_SUCCESS;
