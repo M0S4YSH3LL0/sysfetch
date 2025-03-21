@@ -34,7 +34,16 @@ sfetch -c /path/to/your/sysfetch.conf
 - show # of packages installed (currently only `dpkg`)
 - show `libc` version (currently only `glibc`)
 - show uptime information
+- show architecture information
 
 ## To do's
 
-See comments in `sysfetch.c`
+- Add support for fetching GPU and CPU information.
+- Add support for alternative package managers (e.g., pacman, rpm, etc.).
+- Add Windows/macOS support with platform-specific system calls.
+- Implement configuration file support for user-defined labels and colors.
+- Refactor print_colored() to allow customizable output formatting.
+- Optimize file reading by using statically allocated buffers where possible.
+- Improve error handling by adding logging or debug mode.
+- Implement multithreading to speed up data retrieval.
+- Add unit tests for each system info retrieval function.

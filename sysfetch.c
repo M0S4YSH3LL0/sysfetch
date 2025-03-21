@@ -1,16 +1,3 @@
-// New features, improvements
-// TODO: Add support for fetching GPU and CPU information.
-// TODO: Add support for alternative package managers (e.g., pacman, rpm, etc.).
-// TODO: Add Windows/macOS support with platform-specific system calls.
-// TODO: Implement configuration file support for user-defined labels and
-// colors.
-// TODO: Refactor print_colored() to allow customizable output formatting.
-// TODO: Optimize file reading by using statically allocated buffers where
-// possible.
-// TODO: Improve error handling by adding logging or debug mode.
-// TODO: Implement multithreading to speed up data retrieval.
-// TODO: Add unit tests for each system info retrieval function.
-
 #include <features.h>
 #include <stddef.h>
 #include <stdio.h>
