@@ -26,9 +26,6 @@ Run with default configuration:
 sfetch
 ```
 
-Run with custom configuration:
-*coming soon...*
-
 ## Features
 
 - show OS information
