@@ -1,5 +1,7 @@
 # sysfetch - system information fetcher written in C
 
+![Screenshot](screenshot.png)
+
 ## Requirements
 
 - `gcc` to compile
