@@ -1,5 +1,9 @@
 # sysfetch - system information fetcher written in C
 
+## Requirements
+
+- `gcc` to compile
+
 ## Build
 
 ```bash
