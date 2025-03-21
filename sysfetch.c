@@ -10,8 +10,6 @@
 #define VERSION "0.38"
 #define AUTHOR "m0s4ysh3ll0"
 
-// might add custom config support, like: sysfetch -c custom_config.conf
-#define CONFIG_PATH "~/.config/sysfetch/config.conf"
 #define BUFFER_SIZE 256
 
 // color codes
