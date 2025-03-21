@@ -25,7 +25,7 @@ Run with default configuration:
 ```bash
 sfetch
 ```
-
+asdf
 ## Features
 
 - show OS information
