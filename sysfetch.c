@@ -7,7 +7,7 @@
 #include <sys/utsname.h>
 #include <unistd.h>
 
-#define VERSION "0.37"
+#define VERSION "0.38"
 #define AUTHOR "m0s4ysh3ll0"
 
 // might add custom config support, like: sysfetch -c custom_config.conf
@@ -32,8 +32,25 @@ char os_label[BUFFER_SIZE] = "os";
 char shell_label[BUFFER_SIZE] = "shell";
 char libc_label[BUFFER_SIZE] = "libc";
 char pkgs_label[BUFFER_SIZE] = "packages";
+char arch_label[BUFFER_SIZE] = "arch";
 
 void get_cpu_name(char *buffer, size_t s) { printf("hello world"); }
+
+void get_arch_info(char *buffer, size_t size) {
+  FILE *fp = popen("uname -m", "r");
+  if (fp == NULL) {
+    perror("popen");
+    return;
+  }
+  char line[BUFFER_SIZE];
+  if (fgets(line, sizeof(line), fp) != NULL) {
+    size_t len = strlen(line);
+    if (len > 0 && line[len - 1] == '\n') {
+      line[len - 1] = '\0';
+    }
+    snprintf(buffer, size, "%s", line);
+  }
+}
 
 void get_shell_info(char *buffer, size_t size) {
   char *shell = getenv("SHELL");
@@ -162,7 +179,9 @@ int main(int argc, char *argv[]) {
   // char libc[BUFFER_SIZE];
   // char installed_pkgs[BUFFER_SIZE];
   char shell[BUFFER_SIZE];
+  char arch[BUFFER_SIZE];
 
+  get_arch_info(arch, BUFFER_SIZE);
   get_hostname(hostname, BUFFER_SIZE);
   get_os_info(os, BUFFER_SIZE);
   get_kernel_info(kernel, BUFFER_SIZE);
@@ -176,6 +195,7 @@ int main(int argc, char *argv[]) {
   printf("%s%s%s@%s%s%s\n-----------------\n", BLU, "m0", NRM, GRN, hostname,
          NRM);
   print_colored(os_label, os);
+  print_colored(arch_label, arch);
   print_colored(kernel_label, kernel);
   print_colored(shell_label, shell);
   // print_colored(pkgs_label, installed_pkgs);
