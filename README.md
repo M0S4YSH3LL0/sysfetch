@@ -20,17 +20,14 @@ This will:
 
 ## Usage
 
-Run with default configuration
+Run with default configuration:
 
 ```bash
 sfetch
 ```
 
-Run with custom configuration file (coming soon...)
-
-```bash
-sfetch -c /path/to/your/sysfetch.conf
-```
+Run with custom configuration:
+*coming soon...*
 
 ## Features
 
