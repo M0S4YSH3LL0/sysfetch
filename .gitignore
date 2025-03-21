@@ -3,8 +3,10 @@
 # Ignore all
 *
 
-# Unignore all with extensions
-!*.*
+# Unignore all necessary files
+!*.md
+!*.c
+!*.conf
 
 # Unignore all dirs
 !*/
