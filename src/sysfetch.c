@@ -18,8 +18,6 @@ char libc_label[BUFFER_SIZE] = "libc";
 char pkgs_label[BUFFER_SIZE] = "packages";
 char arch_label[BUFFER_SIZE] = "arch";
 
-void get_cpu_name(char *buffer, size_t s) { printf("hello world"); }
-
 void get_arch_info(char *buffer, size_t size) {
   FILE *fp = popen("uname -m", "r");
   if (fp == NULL) {
