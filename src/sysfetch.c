@@ -1,5 +1,6 @@
 #include "sysfetch.h"
 #include <features.h>
+#include <libgen.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -32,7 +33,7 @@ void get_shell_info(char *buffer, size_t size) {
     return;
   }
 
-  snprintf(buffer, size, "%s", shell);
+  snprintf(buffer, size, "%s", basename(shell));
 }
 
 void get_installed_packages_info(char *buffer, size_t size) {
