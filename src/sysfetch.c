@@ -172,5 +172,10 @@ int main(int argc, char *argv[]) {
   print_colored(LABEL_PKGS, installed_pkgs);
   print_colored(LABEL_LIBC, libc);
   print_colored(LABEL_UPTIME, uptime);
+
+  // print color palette
+  printf("\n\e[30m \e[31m \e[32m \e[33m \e[34m \e[35m "
+         "\e[36m \e[37m \e[0m\n");
+
   return EXIT_SUCCESS;
 }
