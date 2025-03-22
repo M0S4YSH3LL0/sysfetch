@@ -9,11 +9,12 @@
 #include <sys/utsname.h>
 #include <unistd.h>
 
-void get_arch_info(char *buffer, size_t size) {
+char *get_arch_info() {
   FILE *fp = popen("uname -m", "r");
+  static char buffer[BUFFER_SIZE];
   if (fp == NULL) {
     perror("popen");
-    return;
+    return buffer;
   }
   char line[BUFFER_SIZE];
   if (fgets(line, sizeof(line), fp) != NULL) {
@@ -21,26 +22,29 @@ void get_arch_info(char *buffer, size_t size) {
     if (len > 0 && line[len - 1] == '\n') {
       line[len - 1] = '\0';
     }
-    snprintf(buffer, size, "%s", line);
+    snprintf(buffer, BUFFER_SIZE, "%s", line);
   }
+  return buffer;
 }
 
-void get_shell_info(char *buffer, size_t size) {
+char *get_shell_info() {
   char *shell = getenv("SHELL");
-
+  static char buffer[BUFFER_SIZE];
   if (!shell) {
-    snprintf(buffer, size, "%s", "N/A");
-    return;
+    snprintf(buffer, BUFFER_SIZE, "%s", "N/A");
+    return buffer;
   }
 
-  snprintf(buffer, size, "%s", basename(shell));
+  snprintf(buffer, BUFFER_SIZE, "%s", basename(shell));
+  return buffer;
 }
 
-void get_installed_packages_info(char *buffer, size_t size) {
+char *get_installed_packages_info() {
   FILE *fp = popen("dpkg --get-selections | grep -c 'install'", "r");
+  static char buffer[BUFFER_SIZE];
   if (fp == NULL) {
     perror("popen");
-    return;
+    return buffer;
   }
 
   int count;
@@ -51,41 +55,45 @@ void get_installed_packages_info(char *buffer, size_t size) {
     }
   }
   pclose(fp);
-  snprintf(buffer, size, "%d (dpkg)", count);
+  snprintf(buffer, BUFFER_SIZE, "%d (dpkg)", count);
+  return buffer;
 }
 
-void get_libc_info(char *buffer, size_t size) {
+char *get_libc_info() {
+  static char buffer[BUFFER_SIZE];
 #ifdef __GLIBC__
-  snprintf(buffer, size, "glibc %i.%i", __GLIBC__, __GLIBC_MINOR__);
+  snprintf(buffer, BUFFER_SIZE, "glibc %i.%i", __GLIBC__, __GLIBC_MINOR__);
 #elif
-  snprintf(buffer, size, "%s", "N/A");
+  snprintf(buffer, BUFFER_SIZE, "%s", "N/A");
 #endif
-  return;
+  return buffer;
 }
 
-void get_hostname(char *buffer, size_t size) {
+char *get_hostname() {
   char *filename = "/etc/hostname";
   FILE *file = fopen(filename, "r");
+  static char buffer[BUFFER_SIZE];
   if (!file) {
-    snprintf(buffer, size, "N/A");
-    return;
+    snprintf(buffer, BUFFER_SIZE, "%s", "N/A");
+    return buffer;
   }
 
-  if (fgets(buffer, size, file) == NULL) {
-    snprintf(buffer, size, "%s", "N/A");
+  if (fgets(buffer, BUFFER_SIZE, file) == NULL) {
+    snprintf(buffer, BUFFER_SIZE, "%s", "N/A");
   }
   buffer[strcspn(buffer, "\n")] = 0;
 
   fclose(file);
-  return;
+  return buffer;
 }
 
-void get_os_info(char *buffer, size_t size) {
+char *get_os_info() {
   char *filename = "/etc/os-release";
+  static char buffer[BUFFER_SIZE];
   FILE *file = fopen(filename, "r");
   if (!file) {
-    snprintf(buffer, size, "N/A");
-    return;
+    snprintf(buffer, BUFFER_SIZE, "N/A");
+    return buffer;
   }
 
   char line[1024];
@@ -94,26 +102,30 @@ void get_os_info(char *buffer, size_t size) {
       char *p = line + 12;
       p++;
       p[strlen(p) - 2] = 0;
-      snprintf(buffer, size, "%s", p);
+      snprintf(buffer, BUFFER_SIZE, "%s", p);
       buffer[strcspn(buffer, "\n")] = 0;
       break;
     }
   }
 
   fclose(file);
+  return buffer;
 }
 
-void get_kernel_info(char *buffer, size_t size) {
-  struct utsname buf;
-  uname(&buf);
-  snprintf(buffer, size, "%s", buf.release);
+char *get_kernel_info() {
+  struct utsname buf_uname;
+  static char buf_str[BUFFER_SIZE];
+  uname(&buf_uname);
+  snprintf(buf_str, BUFFER_SIZE, "%s", buf_uname.release);
+  return buf_str;
 }
 
-void get_uptime(char *buffer, size_t size) {
+char *get_uptime() {
   FILE *file = fopen("/proc/uptime", "r");
+  static char buffer[BUFFER_SIZE];
   if (!file) {
-    snprintf(buffer, size, "N/A");
-    return;
+    snprintf(buffer, BUFFER_SIZE, "N/A");
+    return buffer;
   }
 
   char line[BUFFER_SIZE];
@@ -122,15 +134,16 @@ void get_uptime(char *buffer, size_t size) {
     if (sscanf(line, "%f", &uptime_seconds) == 1) {
       int hours = (int)(uptime_seconds / 3600);
       int minutes = (int)((uptime_seconds - (hours * 3600)) / 60);
-      snprintf(buffer, size, "%d hours, %d minutes", hours, minutes);
+      snprintf(buffer, BUFFER_SIZE, "%d hours, %d minutes", hours, minutes);
     } else {
-      snprintf(buffer, size, "%s", "N/A");
+      snprintf(buffer, BUFFER_SIZE, "%s", "N/A");
     }
   } else {
-    snprintf(buffer, size, "%s", "N/A");
+    snprintf(buffer, BUFFER_SIZE, "%s", "N/A");
   }
 
   fclose(file);
+  return buffer;
 }
 
 void print_colored(char *label, char *content) {
@@ -143,35 +156,18 @@ void print_header() {
 }
 
 int main(int argc, char *argv[]) {
-  char uptime[BUFFER_SIZE];
-  char kernel[BUFFER_SIZE];
-  char os[BUFFER_SIZE];
-  char hostname[BUFFER_SIZE];
-  char libc[BUFFER_SIZE];
-  char installed_pkgs[BUFFER_SIZE];
-  char shell[BUFFER_SIZE];
-  char arch[BUFFER_SIZE];
-
-  get_arch_info(arch, BUFFER_SIZE);
-  get_hostname(hostname, BUFFER_SIZE);
-  get_os_info(os, BUFFER_SIZE);
-  get_kernel_info(kernel, BUFFER_SIZE);
-  get_libc_info(libc, BUFFER_SIZE);
-  get_uptime(uptime, BUFFER_SIZE);
-  get_installed_packages_info(installed_pkgs, BUFFER_SIZE);
-  get_shell_info(shell, BUFFER_SIZE);
-
   print_header();
 
-  printf("%s%s%s@%s%s%s\n-----------------\n", BLU, "m0", NRM, GRN, hostname,
-         NRM);
-  print_colored(LABEL_OS, os);
-  print_colored(LABEL_ARCH, arch);
-  print_colored(LABEL_KERNEL, kernel);
-  print_colored(LABEL_SHELL, shell);
-  print_colored(LABEL_PKGS, installed_pkgs);
-  print_colored(LABEL_LIBC, libc);
-  print_colored(LABEL_UPTIME, uptime);
+  printf("%s%s%s@%s%s%s\n-----------------\n", BLU, "m0", NRM, GRN,
+         get_hostname(), NRM);
+
+  print_colored(LABEL_OS, get_os_info());
+  print_colored(LABEL_ARCH, get_arch_info());
+  print_colored(LABEL_KERNEL, get_kernel_info());
+  print_colored(LABEL_SHELL, get_shell_info());
+  print_colored(LABEL_PKGS, get_installed_packages_info());
+  print_colored(LABEL_LIBC, get_libc_info());
+  print_colored(LABEL_UPTIME, get_uptime());
 
   // print color palette
   printf("\n\e[30m \e[31m \e[32m \e[33m \e[34m \e[35m "
