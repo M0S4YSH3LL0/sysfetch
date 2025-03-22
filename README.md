@@ -4,7 +4,8 @@
 
 ## Requirements
 
-- `gcc` to compile
+- `gcc`
+- `make`
 
 ## Build
 
