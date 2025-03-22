@@ -53,7 +53,6 @@ void get_installed_packages_info(char *buffer, size_t size) {
   snprintf(buffer, size, "%d (dpkg)", count);
 }
 
-// currently only for glibc
 void get_libc_info(char *buffer, size_t size) {
 #ifdef __GLIBC__
   snprintf(buffer, size, "glibc %i.%i", __GLIBC__, __GLIBC_MINOR__);
@@ -91,7 +90,6 @@ void get_os_info(char *buffer, size_t size) {
   char line[1024];
   while (fgets(line, sizeof(line), file)) {
     if (strncmp(line, "PRETTY_NAME=", 12) == 0) {
-      // hacky stuff to remove first and last character and trailing newline
       char *p = line + 12;
       p++;
       p[strlen(p) - 2] = 0;
@@ -173,6 +171,5 @@ int main(int argc, char *argv[]) {
   print_colored(LABEL_PKGS, installed_pkgs);
   print_colored(LABEL_LIBC, libc);
   print_colored(LABEL_UPTIME, uptime);
-
   return EXIT_SUCCESS;
 }
