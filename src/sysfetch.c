@@ -1,4 +1,5 @@
 #include "sysfetch.h"
+#include "config.h"
 #include <features.h>
 #include <stddef.h>
 #include <stdio.h>
@@ -7,16 +8,6 @@
 #include <sys/types.h>
 #include <sys/utsname.h>
 #include <unistd.h>
-
-// Default labels
-char hostname_label[BUFFER_SIZE] = "host";
-char kernel_label[BUFFER_SIZE] = "kernel";
-char uptime_label[BUFFER_SIZE] = "uptime";
-char os_label[BUFFER_SIZE] = "os";
-char shell_label[BUFFER_SIZE] = "shell";
-char libc_label[BUFFER_SIZE] = "libc";
-char pkgs_label[BUFFER_SIZE] = "packages";
-char arch_label[BUFFER_SIZE] = "arch";
 
 void get_arch_info(char *buffer, size_t size) {
   FILE *fp = popen("uname -m", "r");
@@ -176,13 +167,13 @@ int main(int argc, char *argv[]) {
 
   printf("%s%s%s@%s%s%s\n-----------------\n", BLU, "m0", NRM, GRN, hostname,
          NRM);
-  print_colored(os_label, os);
-  print_colored(arch_label, arch);
-  print_colored(kernel_label, kernel);
-  print_colored(shell_label, shell);
-  print_colored(pkgs_label, installed_pkgs);
-  print_colored(libc_label, libc);
-  print_colored(uptime_label, uptime);
+  print_colored(LABEL_OS, os);
+  print_colored(LABEL_ARCH, arch);
+  print_colored(LABEL_KERNEL, kernel);
+  print_colored(LABEL_SHELL, shell);
+  print_colored(LABEL_PKGS, installed_pkgs);
+  print_colored(LABEL_LIBC, libc);
+  print_colored(LABEL_UPTIME, uptime);
 
   return EXIT_SUCCESS;
 }
