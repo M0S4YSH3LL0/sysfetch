@@ -4,21 +4,30 @@ CFLAGS = -Wall -O2
 LDFLAGS = -lm
 
 HOME := $(shell echo ~$(USER))
-LOCAL_BIN_PATH=$(HOME)/.local/bin
-BIN_ORIGINAL=sysfetch.o
-BIN_NEW=sfetch
-PWD := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
+LOCAL_BIN_PATH := $(HOME)/.local/bin
+BIN_ORIGINAL := sysfetch
+BIN_NEW := sfetch
+BUILD_DIR := bin
+
+SRC := sysfetch.c
+OBJ := $(BUILD_DIR)/$(BIN_ORIGINAL)
 
 .PHONY: clean build link all
 
-clean:
-	$(RM) $(PWD)sysfetch.o
-
-build:
-	$(CC) $(CFLAGS) sysfetch.c -o $(PWD)sysfetch.o
-
-link:
-	ln -sf $(PWD)$(BIN_ORIGINAL) $(LOCAL_BIN_PATH)/$(BIN_NEW)
-
 all: clean build link
+
+$(BUILD_DIR):
+	mkdir -p $@
+
+build: $(BUILD_DIR) $(OBJ)
+
+$(OBJ): $(SRC)
+	$(CC) $(CFLAGS) $< -o $@
+
+link: $(OBJ)
+	mkdir -p $(LOCAL_BIN_PATH)
+	ln -sf $(PWD)/$(OBJ) $(LOCAL_BIN_PATH)/$(BIN_NEW)
+
+clean:
+	$(RM) -r $(BUILD_DIR)
 
