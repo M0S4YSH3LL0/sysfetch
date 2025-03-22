@@ -1,5 +1,4 @@
 #include "sysfetch.h"
-#include "config.h"
 #include <features.h>
 #include <stddef.h>
 #include <stdio.h>

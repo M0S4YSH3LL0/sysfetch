@@ -6,6 +6,16 @@
 
 #define BUFFER_SIZE 256
 
+// change labels if needed
+#define LABEL_HOSTNAME "host"
+#define LABEL_KERNEL "kernel"
+#define LABEL_UPTIME "uptime"
+#define LABEL_OS "os"
+#define LABEL_SHELL "shell"
+#define LABEL_LIBC "libc"
+#define LABEL_PKGS "packages"
+#define LABEL_ARCH "arch"
+
 // color codes
 #define NRM "\x1B[0m"
 #define RED "\x1B[31m"
