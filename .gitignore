@@ -6,6 +6,7 @@
 # Unignore all necessary files
 !*.md
 !*.c
+!*.h
 !*.conf
 
 # Unignore all dirs
