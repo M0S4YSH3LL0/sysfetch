@@ -8,8 +8,10 @@ LOCAL_BIN_PATH := $(HOME)/.local/bin
 BIN_ORIGINAL := sysfetch
 BIN_NEW := sfetch
 BUILD_DIR := bin
-
+SRC_DIR := src
 SRC := sysfetch.c
+
+SRC_OBJ := $(SRC_DIR)/$(SRC)
 OBJ := $(BUILD_DIR)/$(BIN_ORIGINAL)
 
 .PHONY: clean build link all
@@ -21,7 +23,7 @@ $(BUILD_DIR):
 
 build: $(BUILD_DIR) $(OBJ)
 
-$(OBJ): $(SRC)
+$(OBJ): $(SRC_OBJ)
 	$(CC) $(CFLAGS) $< -o $@
 
 link: $(OBJ)
