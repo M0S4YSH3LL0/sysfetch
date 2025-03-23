@@ -63,8 +63,6 @@ char *get_libc_info() {
   static char buffer[BUFFER_SIZE];
 #ifdef __GLIBC__
   snprintf(buffer, BUFFER_SIZE, "glibc %i.%i", __GLIBC__, __GLIBC_MINOR__);
-#elif
-  snprintf(buffer, BUFFER_SIZE, "%s", "N/A");
 #endif
   return buffer;
 }
