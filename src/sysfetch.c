@@ -24,6 +24,7 @@ char *get_arch_info() {
     }
     snprintf(buffer, BUFFER_SIZE, "%s", line);
   }
+  pclose(fp);
   return buffer;
 }
 
