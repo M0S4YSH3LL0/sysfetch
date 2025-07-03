@@ -37,8 +37,8 @@ sfetch
 
 - Add support for fetching GPU and CPU information.
 - Add support for alternative package managers (e.g., pacman, rpm, etc.).
-- Add Windows/macOS support with platform-specific system calls.
 - Implement configuration file support for colors.
 - Refactor print_colored() to allow customizable output formatting.
 - Improve error handling by adding logging or debug mode.
+- Add Windows/macOS support with platform-specific system calls.
 - Implement multithreading to speed up data retrieval.
