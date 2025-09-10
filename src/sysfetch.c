@@ -155,8 +155,8 @@ void print_header() {
 }
 
 int main(int argc, char *argv[]) {
-  print_header();
-
+  // print_header();
+  printf("\n");
   printf("%s%s%s@%s%s%s\n-----------------\n", BLU, "m0", NRM, GRN,
          get_hostname(), NRM);
 
