@@ -1,6 +1,7 @@
 #include "sysfetch.h"
 #include <features.h>
 #include <libgen.h>
+#include <stdbool.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -155,8 +156,28 @@ void print_header() {
 }
 
 int main(int argc, char *argv[]) {
-  // print_header();
-  printf("\n");
+  bool show_header = 0;
+  for (int i = 1; i < argc; ++i) {
+    if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
+      printf("This is a help message.\n");
+      exit(0);
+    } else if (strcmp(argv[i], "-v") == 0 ||
+               strcmp(argv[i], "--version") == 0) {
+      printf("sysfetch %s\n", VERSION);
+      exit(0);
+    } else if (strcmp(argv[i], "-s") == 0 || strcmp(argv[i], "--header") == 0) {
+      show_header = 1;
+    } else {
+      printf("Unknown option: %s\n", argv[i]);
+    }
+  }
+
+  if (show_header) {
+    print_header();
+  } else {
+    printf("\n");
+  }
+
   printf("%s%s%s@%s%s%s\n-----------------\n", BLU, "m0", NRM, GRN,
          get_hostname(), NRM);
 

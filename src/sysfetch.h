@@ -1,7 +1,7 @@
 #ifndef SYSFETCH_H
 #define SYSFETCH_H
 
-#define VERSION "0.40"
+#define VERSION "0.50"
 #define AUTHOR "m0s4ysh3ll0"
 
 #define BUFFER_SIZE 256
