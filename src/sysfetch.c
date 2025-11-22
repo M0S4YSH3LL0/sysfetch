@@ -159,7 +159,7 @@ int main(int argc, char *argv[]) {
   bool show_header = 0;
   for (int i = 1; i < argc; ++i) {
     if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
-      printf("This is a help message.\n");
+      printf("-h Shows this help message.\n-s Print header\n");
       exit(0);
     } else if (strcmp(argv[i], "-v") == 0 ||
                strcmp(argv[i], "--version") == 0) {
