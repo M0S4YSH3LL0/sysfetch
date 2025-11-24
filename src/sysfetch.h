@@ -1,7 +1,7 @@
 #ifndef SYSFETCH_H
 #define SYSFETCH_H
 
-#define VERSION "0.50"
+#define VERSION "0.65"
 #define AUTHOR "m0s4ysh3ll0"
 
 #define BUFFER_SIZE 256
@@ -15,6 +15,7 @@
 #define LABEL_LIBC "libc"
 #define LABEL_PKGS "packages"
 #define LABEL_ARCH "arch"
+#define LABEL_CPU "cpu"
 
 // color codes
 #define NRM "\x1B[0m"

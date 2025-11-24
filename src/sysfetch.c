@@ -20,6 +20,32 @@ char *get_arch_info() {
   return buffer;
 }
 
+char *get_cpu_info() {
+  static char buffer[BUFFER_SIZE];
+
+  FILE *fp = fopen("/proc/cpuinfo", "r");
+  if (!fp) {
+    perror("fopen");
+    return buffer;
+  }
+
+  char line[1024];
+
+  while (fgets(line, sizeof(line), fp)) {
+    if (strncmp(line, "model name", 10) == 0 && buffer[0] == '\0') {
+      char *p = strchr(line, ':');
+      if (p) {
+        while (*(++p) == ' ')
+          ;
+        strncpy(buffer, p, sizeof(buffer) - 1);
+        buffer[strcspn(buffer, "\n")] = 0;
+      }
+    }
+  }
+  fclose(fp);
+  return buffer;
+}
+
 char *get_shell_info() {
   char *shell = getenv("SHELL");
   static char buffer[BUFFER_SIZE];
@@ -159,8 +185,8 @@ int main(int argc, char *argv[]) {
   print_colored(LABEL_SHELL, get_shell_info());
   print_colored(LABEL_PKGS, get_installed_packages_info());
   print_colored(LABEL_LIBC, get_libc_info());
+  print_colored(LABEL_CPU, get_cpu_info());
   print_colored(LABEL_UPTIME, get_uptime());
-
   // print color palette
   printf("\n\e[30m \e[31m \e[32m \e[33m \e[34m \e[35m "
          "\e[36m \e[37m \e[0m\n");
