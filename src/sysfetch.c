@@ -40,6 +40,8 @@ char *get_cpu_info() {
         strncpy(buffer, p, sizeof(buffer) - 1);
         buffer[strcspn(buffer, "\n")] = 0;
       }
+    } else {
+      snprintf(buffer, BUFFER_SIZE, "%s", "N/A");
     }
   }
   fclose(fp);
