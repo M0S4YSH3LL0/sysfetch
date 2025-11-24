@@ -1,31 +1,22 @@
 #include "sysfetch.h"
 #include <features.h>
 #include <libgen.h>
+#include <linux/sysinfo.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/sysinfo.h>
 #include <sys/types.h>
 #include <sys/utsname.h>
 #include <unistd.h>
 
 char *get_arch_info() {
-  FILE *fp = popen("uname -m", "r");
+  static struct utsname arch_info;
   static char buffer[BUFFER_SIZE];
-  if (fp == NULL) {
-    perror("popen");
-    return buffer;
-  }
-  char line[BUFFER_SIZE];
-  if (fgets(line, sizeof(line), fp) != NULL) {
-    size_t len = strlen(line);
-    if (len > 0 && line[len - 1] == '\n') {
-      line[len - 1] = '\0';
-    }
-    snprintf(buffer, BUFFER_SIZE, "%s", line);
-  }
-  pclose(fp);
+  uname(&arch_info);
+  snprintf(buffer, BUFFER_SIZE, "%s", arch_info.machine);
   return buffer;
 }
 
@@ -42,21 +33,22 @@ char *get_shell_info() {
 }
 
 char *get_installed_packages_info() {
-  FILE *fp = popen("dpkg --get-selections | grep -c 'install'", "r");
+  FILE *fp = fopen("/var/lib/dpkg/status", "r");
   static char buffer[BUFFER_SIZE];
   if (fp == NULL) {
     perror("popen");
     return buffer;
   }
 
-  int count;
+  int count = 0;
   char line[BUFFER_SIZE];
-  if (fgets(line, sizeof(line), fp) != NULL) {
-    if (sscanf(line, "%d", &count) != 1) {
-      count = 0;
+  while (fgets(line, sizeof(line), fp)) {
+    if (strncmp(line, "Status: install ok installed", 27) == 0) {
+      count++;
     }
   }
-  pclose(fp);
+
+  fclose(fp);
   snprintf(buffer, BUFFER_SIZE, "%d (dpkg)", count);
   return buffer;
 }
@@ -70,20 +62,12 @@ char *get_libc_info() {
 }
 
 char *get_hostname() {
-  char *filename = "/etc/hostname";
-  FILE *file = fopen(filename, "r");
   static char buffer[BUFFER_SIZE];
-  if (!file) {
-    snprintf(buffer, BUFFER_SIZE, "%s", "N/A");
-    return buffer;
-  }
 
-  if (fgets(buffer, BUFFER_SIZE, file) == NULL) {
-    snprintf(buffer, BUFFER_SIZE, "%s", "N/A");
+  if (gethostname(buffer, BUFFER_SIZE) == -1) {
+    perror("gethostname");
+    exit(1);
   }
-  buffer[strcspn(buffer, "\n")] = 0;
-
-  fclose(file);
   return buffer;
 }
 
@@ -121,28 +105,16 @@ char *get_kernel_info() {
 }
 
 char *get_uptime() {
-  FILE *file = fopen("/proc/uptime", "r");
+  static struct sysinfo info;
   static char buffer[BUFFER_SIZE];
-  if (!file) {
-    snprintf(buffer, BUFFER_SIZE, "N/A");
-    return buffer;
+  if (sysinfo(&info) == -1) {
+    perror("sysinfo");
+    exit(1);
   }
-
-  char line[BUFFER_SIZE];
-  float uptime_seconds = 0.0;
-  if (fgets(line, sizeof(line), file) != NULL) {
-    if (sscanf(line, "%f", &uptime_seconds) == 1) {
-      int hours = (int)(uptime_seconds / 3600);
-      int minutes = (int)((uptime_seconds - (hours * 3600)) / 60);
-      snprintf(buffer, BUFFER_SIZE, "%d hours, %d minutes", hours, minutes);
-    } else {
-      snprintf(buffer, BUFFER_SIZE, "%s", "N/A");
-    }
-  } else {
-    snprintf(buffer, BUFFER_SIZE, "%s", "N/A");
-  }
-
-  fclose(file);
+  int uptime_seconds = info.uptime;
+  int hours = (int)(uptime_seconds / 3600);
+  int minutes = (int)((uptime_seconds - (hours * 3600)) / 60);
+  snprintf(buffer, BUFFER_SIZE, "%d hours, %d minutes", hours, minutes);
   return buffer;
 }
 
@@ -163,7 +135,7 @@ int main(int argc, char *argv[]) {
       exit(0);
     } else if (strcmp(argv[i], "-v") == 0 ||
                strcmp(argv[i], "--version") == 0) {
-      printf("sysfetch %s\n", VERSION);
+      printf("sysfetch %s (Build: %s %s)\n", VERSION, __DATE__, __TIME__);
       exit(0);
     } else if (strcmp(argv[i], "-s") == 0 || strcmp(argv[i], "--header") == 0) {
       show_header = 1;
