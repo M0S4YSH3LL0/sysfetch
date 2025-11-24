@@ -15,3 +15,5 @@
 # Unignore Makefile
 !Makefile
 
+# Unignore man page file
+!*.1
