@@ -1,4 +1,4 @@
-# sysfetch - system information fetcher written in C
+# sysfetch - system information fetcher
 
 **sysfetch** is a lightweight system information fetcher written in C.
 It provides basic functionality and is (little to not) configurable.
