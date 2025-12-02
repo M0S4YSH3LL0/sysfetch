@@ -1,29 +1,31 @@
 # sysfetch - system information fetcher written in C
 
-![Screenshot](screenshot.png)
-
-This tool is a simple (and poorly written) system information fetcher.
-It has basic functionality and is (little to not) configurable.
+**sysfetch** is a lightweight system information fetcher written in C.
+It provides basic functionality and is (little to not) configurable.
 Feel free to use/contribute if you like.
 
-## Requirements
+![Screenshot](screenshot.png)
+
+## 📦 Requirements
 
 - `gcc`
 - `make`
 
-## Build and install
+## 🔧 Build & Install
+
+Build and install to your local prefix (`~/.local` by default):
 
 ```bash
 make all && make install
 ```
 
-## Usage
+## ▶️ Usage
 
 ```bash
 sysfetch -h
 ```
 
-## Features
+## ✨ Features
 
 `sysfetch` shows a variety of system information:
 
@@ -36,7 +38,7 @@ sysfetch -h
 - `libc` version (currently only `glibc`)
 - System uptime
 
-## To do's
+## 📝 To-Do List / Planned improvements
 
 - Add support for fetching GPU information.
 - Add support for alternative package managers (e.g., pacman, rpm, etc.).
