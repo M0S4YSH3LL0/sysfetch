@@ -31,6 +31,8 @@ char *get_cpu_info() {
 
   char line[1024];
 
+  snprintf(buffer, BUFFER_SIZE, "%s", "N/A");
+
   while (fgets(line, sizeof(line), fp)) {
     if (strncmp(line, "model name", 10) == 0 && buffer[0] == '\0') {
       char *p = strchr(line, ':');
@@ -40,8 +42,6 @@ char *get_cpu_info() {
         strncpy(buffer, p, sizeof(buffer) - 1);
         buffer[strcspn(buffer, "\n")] = 0;
       }
-    } else {
-      snprintf(buffer, BUFFER_SIZE, "%s", "N/A");
     }
   }
   fclose(fp);
