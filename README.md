@@ -11,34 +11,36 @@ Feel free to use/contribute if you like.
 - `gcc`
 - `make`
 
-## Build
+## Build and install
 
 ```bash
-make all
+make all && make install
 ```
 
 ## Usage
 
 ```bash
-sfetch
+sysfetch -h
 ```
 
 ## Features
 
-- show OS information
-- show kernel version
-- show shell information
-- show # of packages installed (currently only `dpkg`)
-- show `libc` version (currently only `glibc`)
-- show uptime information
-- show architecture information
+`sysfetch` shows a variety of system information:
+
+- OS name and version
+- CPU model
+- Architecture information
+- Kernel version
+- Shell information
+- Number of packages installed (currently only `dpkg`)
+- `libc` version (currently only `glibc`)
+- System uptime
 
 ## To do's
 
-- Add support for fetching GPU and CPU information.
+- Add support for fetching GPU information.
 - Add support for alternative package managers (e.g., pacman, rpm, etc.).
 - Implement configuration file support for colors.
 - Refactor print_colored() to allow customizable output formatting.
 - Improve error handling by adding logging or debug mode.
 - Add Windows/macOS support with platform-specific system calls.
-- Implement multithreading to speed up data retrieval.
