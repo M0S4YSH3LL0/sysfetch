@@ -13,8 +13,8 @@
 #include <unistd.h>
 
 typedef struct {
-  char CONFIG_PREFIX[8];
-  char CONFIG_SEPERATOR[8];
+  char CONFIG_PREFIX[128];
+  char CONFIG_SEPERATOR[128];
   char CONFIG_LABEL_OS[128];
   char CONFIG_LABEL_ARCH[128];
   char CONFIG_LABEL_CPU[128];
@@ -44,31 +44,33 @@ Config *parse_config() {
       continue;
 
     if (strcmp(key, "LABEL_OS") == 0) {
-      strncpy(cfg->CONFIG_LABEL_OS, value, sizeof(cfg->CONFIG_LABEL_OS) - 1);
+      snprintf(cfg->CONFIG_LABEL_OS, sizeof(cfg->CONFIG_LABEL_OS), "%s", value);
     } else if (strcmp(key, "LABEL_ARCH") == 0) {
-      strncpy(cfg->CONFIG_LABEL_ARCH, value,
-              sizeof(cfg->CONFIG_LABEL_ARCH) - 1);
+      snprintf(cfg->CONFIG_LABEL_ARCH, sizeof(cfg->CONFIG_LABEL_ARCH), "%s",
+               value);
     } else if (strcmp(key, "LABEL_CPU") == 0) {
-      strncpy(cfg->CONFIG_LABEL_CPU, value, sizeof(cfg->CONFIG_LABEL_CPU) - 1);
+      snprintf(cfg->CONFIG_LABEL_CPU, sizeof(cfg->CONFIG_LABEL_CPU), "%s",
+               value);
     } else if (strcmp(key, "LABEL_KERNEL") == 0) {
-      strncpy(cfg->CONFIG_LABEL_KERNEL, value,
-              sizeof(cfg->CONFIG_LABEL_KERNEL) - 1);
+      snprintf(cfg->CONFIG_LABEL_KERNEL, sizeof(cfg->CONFIG_LABEL_KERNEL), "%s",
+               value);
     } else if (strcmp(key, "LABEL_UPTIME") == 0) {
-      strncpy(cfg->CONFIG_LABEL_UPTIME, value,
-              sizeof(cfg->CONFIG_LABEL_UPTIME) - 1);
+      snprintf(cfg->CONFIG_LABEL_UPTIME, sizeof(cfg->CONFIG_LABEL_UPTIME), "%s",
+               value);
     } else if (strcmp(key, "LABEL_PKGS") == 0) {
-      strncpy(cfg->CONFIG_LABEL_PKGS, value,
-              sizeof(cfg->CONFIG_LABEL_PKGS) - 1);
+      snprintf(cfg->CONFIG_LABEL_PKGS, sizeof(cfg->CONFIG_LABEL_PKGS), "%s",
+               value);
     } else if (strcmp(key, "LABEL_LIBC") == 0) {
-      strncpy(cfg->CONFIG_LABEL_LIBC, value,
-              sizeof(cfg->CONFIG_LABEL_LIBC) - 1);
+      snprintf(cfg->CONFIG_LABEL_LIBC, sizeof(cfg->CONFIG_LABEL_LIBC), "%s",
+               value);
     } else if (strcmp(key, "LABEL_SHELL") == 0) {
-      strncpy(cfg->CONFIG_LABEL_SHELL, value,
-              sizeof(cfg->CONFIG_LABEL_SHELL) - 1);
+      snprintf(cfg->CONFIG_LABEL_SHELL, sizeof(cfg->CONFIG_LABEL_SHELL), "%s",
+               value);
     } else if (strcmp(key, "PREFIX") == 0) {
-      strncpy(cfg->CONFIG_PREFIX, value, sizeof(cfg->CONFIG_PREFIX) - 1);
+      snprintf(cfg->CONFIG_PREFIX, sizeof(cfg->CONFIG_PREFIX), "%s", value);
     } else if (strcmp(key, "SEPERATOR") == 0) {
-      strncpy(cfg->CONFIG_SEPERATOR, value, sizeof(cfg->CONFIG_SEPERATOR) - 1);
+      snprintf(cfg->CONFIG_SEPERATOR, sizeof(cfg->CONFIG_SEPERATOR), "%s",
+               value);
     }
   }
   fclose(file);
@@ -212,31 +214,36 @@ void print_colored(char *label, char *content, Config *conf) {
          conf->CONFIG_SEPERATOR, NRM, content);
 }
 
-void print_header() {
+void print_banner() {
   printf("\n%s-=[%s %ssysfetch%s %sv%s%s (%s@%s%s) %s]=-%s\n\n", BLU, NRM, CYN,
          NRM, YEL, VERSION, NRM, MAG, AUTHOR, NRM, BLU, NRM);
 }
 
 int main(int argc, char *argv[]) {
   Config *conf = parse_config();
-  bool show_header = 0;
+  bool show_banner = 0;
+  bool show_palette = 1;
   for (int i = 1; i < argc; ++i) {
     if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
-      printf("-h Shows this help message.\n-s Print header\n");
-      exit(0);
+      printf("-h Shows this help message.\n-b Print with banner\n-p Print "
+             "without color palette");
+      return EXIT_SUCCESS;
     } else if (strcmp(argv[i], "-v") == 0 ||
                strcmp(argv[i], "--version") == 0) {
       printf("sysfetch %s (Build: %s %s)\n", VERSION, __DATE__, __TIME__);
-      exit(0);
-    } else if (strcmp(argv[i], "-s") == 0 || strcmp(argv[i], "--header") == 0) {
-      show_header = 1;
+      return EXIT_SUCCESS;
+    } else if (strcmp(argv[i], "-b") == 0 || strcmp(argv[i], "--banner") == 0) {
+      show_banner = 1;
+    } else if (strcmp(argv[i], "-p") == 0 ||
+               strcmp(argv[i], "--no-palette") == 0) {
+      show_palette = 0;
     } else {
       printf("Unknown option: %s\n", argv[i]);
     }
   }
 
-  if (show_header) {
-    print_header();
+  if (show_banner) {
+    print_banner();
   } else {
     printf("\n");
   }
@@ -253,8 +260,9 @@ int main(int argc, char *argv[]) {
   print_colored(conf->CONFIG_LABEL_CPU, get_cpu_info(), conf);
   print_colored(conf->CONFIG_LABEL_UPTIME, get_uptime(), conf);
   // print color palette
-  printf("\n\e[30m \e[31m \e[32m \e[33m \e[34m \e[35m "
-         "\e[36m \e[37m \e[0m\n");
-
+  if (show_palette) {
+    printf("\n\e[30m \e[31m \e[32m \e[33m \e[34m \e[35m "
+           "\e[36m \e[37m \e[0m\n");
+  }
   return EXIT_SUCCESS;
 }
