@@ -25,6 +25,16 @@ make all && make install
 sysfetch -h
 ```
 
+## ⚙️ Configuration
+
+`$HOME/.config/sysfetch/sysfetch.conf` (after installation)
+
+You can customize the following:
+
+- label names
+- prefix
+- separator
+
 ## ✨ Features
 
 `sysfetch` shows a variety of system information:
@@ -42,7 +52,7 @@ sysfetch -h
 
 - Add support for fetching GPU information.
 - Add support for alternative package managers (e.g., pacman, rpm, etc.).
-- Implement configuration file support for colors.
+- Implement configuration file support for labels and colors. (WIP)
 - Refactor print_colored() to allow customizable output formatting.
 - Improve error handling by adding logging or debug mode.
 - Add Windows/macOS support with platform-specific system calls.
