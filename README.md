@@ -13,7 +13,7 @@ Feel free to use/contribute if you like.
 
 ## Build & Install
 
-Build and install to your local prefix (`~/.local` by default):
+Build and install to your local prefix (`~/.local` by default, specify with `PREFIX=`):
 
 ```bash
 make all && make install
