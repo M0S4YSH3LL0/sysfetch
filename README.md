@@ -6,12 +6,12 @@ Feel free to use/contribute if you like.
 
 ![Screenshot](screenshot.png)
 
-## 📦 Requirements
+## Requirements
 
 - `gcc`
 - `make`
 
-## 🔧 Build & Install
+## Build & Install
 
 Build and install to your local prefix (`~/.local` by default):
 
@@ -19,13 +19,13 @@ Build and install to your local prefix (`~/.local` by default):
 make all && make install
 ```
 
-## ▶️ Usage
+## Usage
 
 ```bash
 sysfetch -h
 ```
 
-## ⚙️ Configuration
+## Configuration
 
 `$HOME/.config/sysfetch/sysfetch.conf` (after installation)
 
@@ -35,7 +35,7 @@ You can customize the following:
 - prefix
 - separator
 
-## ✨ Features
+## Features
 
 `sysfetch` shows a variety of system information:
 
@@ -48,7 +48,7 @@ You can customize the following:
 - `libc` version (currently only `glibc`)
 - System uptime
 
-## 📝 To-Do List / Planned improvements
+## To-Do List / Planned improvements
 
 - Add support for fetching GPU information.
 - Add support for alternative package managers (e.g., pacman, rpm, etc.).
