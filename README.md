@@ -4,8 +4,6 @@
 It provides basic functionality and is (little to not) configurable.
 Feel free to use/contribute if you like.
 
-![Screenshot](screenshot.png)
-
 ## Requirements
 
 - `gcc`
